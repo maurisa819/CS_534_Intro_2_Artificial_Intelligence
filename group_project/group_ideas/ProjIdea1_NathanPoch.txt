@@ -1,0 +1,53 @@
+Phishing Detection (Email)
+
+AI-Based Approaches:
+- Machine Learning Classifiers
+- Natural Language Processing (NLP)
+- Behavioral Analysis
+
+
+SOTA: (from first source)
+- Machine Learning Algs:
+	- Supervised
+		- Decision Trees
+		- Random Forests
+		- Support Vector Machines (SVM)
+	- Unsupervised:
+		- K-means
+		- DBSCAN
+- Natural Language Processing (NLP)
+	- Text Preprocessing (tokenization...)
+	- Feature Extraction
+	- Sentiment Analysis
+- Deep Learning Models
+	- Feedforward Neural Networks
+	- Recurrent Neural Networks
+		- Long Short-Term Memory Nets (LSTM)
+	- Convolutional Neural Networks
+
+
+Possible Datasets
+- https://www.kaggle.com/datasets/naserabdullahalam/phishing-email-dataset/data
+	- One user warns it can be hard to clean. But it is used in some 
+		recent research
+	- Can also be found at:
+		- https://zenodo.org/records/8339691
+		- https://figshare.com/articles/dataset/Phishing_Email_11_Curated_Datasets/24952503
+		- https://github.com/rokibulroni/Phishing-Email-Dataset
+
+- https://data.mendeley.com/datasets/f45bkkt8pr/1
+	- For sms (text messages, not emails)
+	- Only about 6k samples
+
+- 
+
+
+Sources: (these are lit-review sources: we can get more papers from them, and I have 
+	some more in storage)
+
+https://www.researchgate.net/profile/Antony-Owen/publication/389265160_Evaluating_the_Effectiveness_of_AI-Based_Phishing_Detection_in_IoT_Communication_Protocols/links/67bbaf5596e7fb48b9cb7579/Evaluating-the-Effectiveness-of-AI-Based-Phishing-Detection-in-IoT-Communication-Protocols.pdf?__cf_chl_tk=JQ._mnrKzp5nW8ahYpm3tsuVU1v_wyaUS4R3Bzq5ZIQ-1749410854-1.0.1.1-NheN3wN8A5GnneBp4_LsT6UIZwkO2ySE9j5v5vsealQ
+
+https://pdf.sciencedirectassets.com/280203/1-s2.0-S1877050921X00129/1-s2.0-S1877050921011741/main.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEL3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIBt3KXOPguEqFu026aPTWj5h485il8cKpjJbUcOka9lMAiEAwNU4UbbFnJ3Ounf03sU%2F7RTenPkCvt5galgj8ThmdcsqvAUIlf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAFGgwwNTkwMDM1NDY4NjUiDM%2Fs168EH%2FWd1rzYBSqQBd2FWzs5HLeVMIY6TU7vRmf5Z0W2YXzHDYfE3MjZGu6LbBa41NUyHSJtZbAbsegJrmR8WKn2i2BJG9CTTMC3hYz30vfI0jzsz8HID2hi%2Bsmme8dYowzYKSxPHbAIwW8OJeKqDp1yJdaBvsfXpddyEcP6QNgJtZcODwMYJ%2B4sb%2BC%2B5wPJjPJvYsAbbmMg%2FM4oj3i0EdgmkEFhjjviIrA%2F4hOKEtkLmc7vgjxd4jc4V1DKj6Kv5DF3CKHS%2Btsfrl61GRn4A8lu%2B%2FEjtCTeZLjTsfVz4cIrkXhlSWCMRWuqFddrNzgTozus4nk2vehHJOOopt6gY3oRccDSgQva8yVVlSlqPPbT8FHn0x9tKa8Ul7iJH%2FBtbPINnKOP6BDCux04GRJZ3dJbMVkt4S1zTYV2XWlKyepxp1VWXq9bLUHJ%2F6IHALb1BCZHccQj8U5yPZgb8sa%2BuRKK7oPBifU%2BdAxTlz%2FMfdljV97PSWtXMYDMX7WFPrEbNvWyYFtZWjyWqYj%2BgLVws49aBjWpWJEXSfodk%2BzQHvt4w1h0STTslwkVtkMNvieioUCGzAquPqNn2GEZmQ8MTaU1Go9PzOLHeoTw3wJydTGZoRjLZO6OzkexImeuoiLU0VzxQia573qoWiI%2BhANeSb8tX%2F6Dj29%2BFwSyYPZWKmFl6mU5Hvf%2BvGRjGuJPfSN4TH%2FK%2FVMuJElBWTAYenjDCd79KvFw%2BBW42WN38VW5K7DrCEsa6t%2BJwRo8T7rIZqI49ZZZs9eh0%2BsDAJ7mQmSFmLWH2N1R7BrwI%2FIXI4eg0Py5UChxayzX%2B1cvP5Cu8wIRXbjITnGgSiaKrycn4Rl76pi0XbHVgNYemKjMCkghu6kYwPFeDMPlxGchakkuMJ3al8IGOrEBm6Uhf%2BzFyRB7VO2hiEz3DHnIpIOVjjwPiTLwA2C95%2BOfllzv68NPgs92Tq4z%2BG54te%2FFyjdLvJDKIbpv4SOVEbfIbv9FF650Yk2anbW0Fj%2FohE%2BgeM1JJA%2BNxzWv7CvD%2F0LkqPZfuW0dRvb9H0XjAIo%2BKesZNc6FG5rapEDt%2B0bv7fQpdkZc8ONbcbEFH5Ivt8TWdXagCdS5Po%2Fa39dVcJt6NmnG1zoiDNUn0veg5M2u&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250608T214053Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ3PHCVTY4RVUZMQL%2F20250608%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=f479fc9eed8f24d1ebd9ecd44db7d6b6084a0a571562d93e3f375aca4f07ef65&hash=a1a942b3e3245b4ab9a966a4d46abd5b15ee2b8ba63d99945ad0535b2beb1cbf&host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&pii=S1877050921011741&tid=spdf-e6b24fb1-323d-4778-a41f-c59f742e182d&sid=9065f69a72274940f79a3297b2eaffaf4ae0gxrqa&type=client&tsoh=d3d3LnNjaWVuY2VkaXJlY3QuY29t&rh=d3d3LnNjaWVuY2VkaXJlY3QuY29t&ua=0f1d595603045f050254&rr=94cb8cd78bdf9044&cc=us
+
+
+
