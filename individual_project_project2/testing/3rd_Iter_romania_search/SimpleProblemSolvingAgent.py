@@ -5,7 +5,11 @@ for finding shortest or heuristic paths on the Romania road map.
 
 import math
 import random
-from queue import PriorityQueue
+
+# For the Greedy Best-First Search and A* Search, the PriorityQueue module gave a very efficient "box"
+# to store by priority (auto-sorting), not by index. This module also offer a safe thread producer-consumer
+# model to parallelize an extend this application.
+from queue import PriorityQueue  #
 
 # -----------------------------------------------------------------------------
 # DATA DEFINITIONS
@@ -17,8 +21,13 @@ from queue import PriorityQueue
 # Road distances between Romanian cities (undirected graph).
 # Each key maps to neighbors and the driving distance (in km).
 ROMANIA_ROAD_MAP = {
-    "Arad": {"Zerind": 75, "Sibiu": 140, "Timisoara": 118},
-    "Bucharest": {"Urziceni": 85, "Pitesti": 101, "Giurgiu": 90, "Fagaras": 211},
+    "Arad": {"Zerind": 75, "Sibiu": 140, "Timisoara": 118},  # neighbors of Arad
+    "Bucharest": {
+        "Urziceni": 85,
+        "Pitesti": 101,
+        "Giurgiu": 90,
+        "Fagaras": 211,
+    },  # neighbors of Bucharest
     "Craiova": {"Pitesti": 138, "Rimnicu": 146, "Drobeta": 120},
     "Drobeta": {"Mehadia": 75, "Craiova": 120},
     "Eforie": {"Hirsova": 86},
@@ -39,7 +48,7 @@ ROMANIA_ROAD_MAP = {
     "Zerind": {"Arad": 75, "Oradea": 71},
 }
 
-# Straight-line (Euclidean) coordinates used for heuristic estimates.
+# Straight-line coordinates used for heuristic estimates.
 CITY_COORDINATES = {
     "Arad": (91, 492),
     "Bucharest": (400, 327),
@@ -80,6 +89,10 @@ class SimpleProblemSolvingAgent:
         self.graph = ROMANIA_ROAD_MAP  # road network
         self.locations = CITY_COORDINATES  # for heuristic computation
 
+    # The SimpleProblemSolvingAgent class's heuristic method calculates the straight-line
+    # distance between two cities or points. The heuristic method is employed by the Greedy Best-First and A* searches.
+    # It is commonly used in geographical pathfinding because it is easy to calculate and provides a better lower
+    # bound of the actual distance path.
     def heuristic(self, node: str, goal: str) -> float:
         """
         Straight-line (Euclidean) distance between 'node' and 'goal'.
@@ -91,10 +104,14 @@ class SimpleProblemSolvingAgent:
         Returns:
             Euclidean distance used as heuristic estimate.
         """
-        x1, y1 = self.locations[node]
-        x2, y2 = self.locations[goal]
-        return math.hypot(x2 - x1, y2 - y1)
+        x1, y1 = self.locations[node]  # Setting the coordinates for the current city
+        x2, y2 = self.locations[goal]  # Setting the coordinates for the target city
+        return math.hypot(x2 - x1, y2 - y1)  # Euclidean formula
 
+    # Greedy Best-First Search begins at a node, and we use a PriorityQueue, keyed by heuristic
+    # distance to the goal, as the priority queue, and tracks visited nodes. It repeatedly extends
+    # the node with the smallest heuristic, enqueues unvisited neighbors with their heuristic values,
+    # and stops when the goal is found or the queue becomes empty. Fast but ignores path cost.
     def greedy_best_first_search(self, start: str, goal: str):
         """
         Perform Greedy Best-First Search: expand the node with
@@ -103,22 +120,22 @@ class SimpleProblemSolvingAgent:
         Returns:
             (path_list, total_cost)
         """
-        frontier = PriorityQueue()
+        frontier = PriorityQueue()  # Small heap order by priority
         # Priority = heuristic estimate; store (priority, path_so_far)
-        frontier.put((self.heuristic(start, goal), [start]))
-        explored = set()
+        frontier.put((self.heuristic(start, goal), [start]))  # Setting start
+        explored = set()  # Visited set
 
-        while not frontier.empty():
-            _, path = frontier.get()
-            node = path[-1]
-            # Goal test
+        while not frontier.empty():  # Until no nodes are left
+            _, path = frontier.get()  # get path with best heuristics value
+            node = path[-1]  # current city
+            # Testing the Goal
             if node == goal:
                 return path, self.calculate_path_cost(path)
-            if node in explored:
+            if node in explored:  # skip if already visited
                 continue
-            explored.add(node)
+            explored.add(node)  # mark it visited or explored
 
-            # Expand neighbors, prioritizing by heuristic only
+            # Add all unvisited neighbors to frontier
             for neighbor in self.graph[node]:
                 if neighbor not in explored:
                     new_path = path + [neighbor]
@@ -127,31 +144,37 @@ class SimpleProblemSolvingAgent:
 
         return [], float("inf")  # No path found
 
+    # The A* Search algorithm sets up a priority queue with the start node scored by
+    # f = g + h (with g = 0, h = heuristic). It tracks the best g-scores, repeatedly
+    # extends the lowest f-score node, skips revisited nodes at a higher cost,
+    # and enqueues neighbors with updated f-scores. It stops when it finds the goal.
     def astar_search(self, start: str, goal: str):
         """
         Perform A* Search: combine path cost so far and heuristic.
 
         Returns:
             (path_list, total_cost)
+            A* Search: f(n)=g(n)+h(n). Returns shortest-cost path.
         """
+        # priority queue for f [total cheapest solution cost, estimated]= g [cost so far] + h [heuristic estimate]
         frontier = PriorityQueue()
         # Priority = g + h; queue items: (priority, g_cost, path)
         frontier.put((self.heuristic(start, goal), 0, [start]))
-        explored_costs = {}
+        explored_costs = {}  # place holder for best g-costs seen so far
 
         while not frontier.empty():
             f, cost_so_far, path = frontier.get()
-            node = path[-1]
-            # Goal test
-            if node == goal:
+            node = path[-1]  # current node
+            # Testing the Goal
+            if node == goal:  # Goal found
                 return path, cost_so_far
 
-            # Skip if we have a cheaper path already
+            # Skip if we have seen a cheaper path already
             if node in explored_costs and explored_costs[node] <= cost_so_far:
                 continue
             explored_costs[node] = cost_so_far
 
-            # Expand with path-cost + heuristic
+            # Extend with path-cost + heuristic
             for neighbor, step_cost in self.graph[node].items():
                 new_cost = cost_so_far + step_cost
                 priority = new_cost + self.heuristic(neighbor, goal)
@@ -159,34 +182,42 @@ class SimpleProblemSolvingAgent:
 
         return [], float("inf")  # No path found
 
+    # Hill Climbing starts at the initial node and repeatedly moves to the unvisited neighbor that has the
+    # lowest heuristic distance to the goal. The process continues until no neighbor shows any improvement,
+    # at which point it returns the path found. Although this method is straightforward, deterministic, and greedy,
+    # it is susceptible to getting stuck in local optima, as it ignores the overall path cost.
     def hill_climbing(self, start: str, goal: str):
         """
         Hill Climbing: always move to the neighbor with the
-        best (lowest) heuristic, stopping at local maxima/minima.
+        best (lowest) heuristic, stopping when no neighbor improves heuristic.
 
         Returns:
             (path_list, total_cost)
         """
-        path = [start]
+        path = [start]  # initialize path
         while True:
-            node = path[-1]
-            # Evaluate neighbors not yet visited
+            node = path[-1]  # current end of path
+            #  list of (neighbor, h-value) excluding visited
             candidates = [
                 (nbr, self.heuristic(nbr, goal))
                 for nbr in self.graph[node]
                 if nbr not in path
             ]
-            if not candidates:
+            if not candidates:  # no moves available
                 break
             # Pick neighbor with smallest heuristic
             best_nbr, best_h = min(candidates, key=lambda x: x[1])
             # Stop if no improvement
             if best_h >= self.heuristic(node, goal):
                 break
-            path.append(best_nbr)
+            path.append(best_nbr)  # move to best neighbor
 
         return path, self.calculate_path_cost(path)
 
+    # In Simulated Annealing, whenever a proposed move increases the cost by a delta, it is not accepted.
+    # Instead, it takes it with a probability that mirrors how, in a heated metal, higher‐energy states
+    # are occupied with exactly this likelihood in statistical physics. This probability is known as
+    # the Boltzmann probability.
     def simulated_annealing(
         self,
         start: str,
@@ -198,16 +229,6 @@ class SimpleProblemSolvingAgent:
         """
         Simulated Annealing: probabilistically accept worse moves early
         to escape local optima, cooling over time via 'schedule'.
-
-        Args:
-            start: origin city.
-            goal: target city.
-            schedule: temperature schedule function of step t.
-            max_steps: maximum iterations allowed.
-            seed: random seed for reproducibility.
-
-        Returns:
-            (path_list, total_cost)
         """
         random.seed(seed)
         path = [start]
@@ -219,7 +240,6 @@ class SimpleProblemSolvingAgent:
                 break
 
             node = path[-1]
-            # Possible next steps not in current path
             neighbors = [nbr for nbr in self.graph[node] if nbr not in path]
             if not neighbors:
                 break
@@ -229,19 +249,22 @@ class SimpleProblemSolvingAgent:
             next_cost = self.calculate_path_cost(next_path)
             delta = next_cost - cost
 
-            # Accept if better or by Boltzmann probability
+            # Accept better moves, or worse ones with Boltzmann probability
             if delta < 0 or random.random() < math.exp(-delta / T):
                 path, cost = next_path, next_cost
 
-            if next_node == goal:
+            if path[-1] == goal:
                 break
 
-        # If Annealing fails to reach goal, fallback to greedy best-first
-        if not path or path[-1] != goal:
+        # Fallback if we never reached the goal
+        if path[-1] != goal:
             return self.greedy_best_first_search(start, goal)
 
         return path, cost
 
+    # This method computes a path’s total distance by summing the edge weights or values of each pair.
+    # It loops through indices 0…len(path)-2, looks up graph[path[i]][path[i+1]] for each consecutive city pair,
+    # and uses sum() to aggregate those distances. The search algorithms use this cost to compare and rank paths.
     def calculate_path_cost(self, path: list) -> int:
         """
         Compute total driving distance of a given path.
